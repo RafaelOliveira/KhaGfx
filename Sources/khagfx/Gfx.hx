@@ -36,23 +36,23 @@ class Gfx
 	public static function drawEllipse(g1:Graphics, xm:Int, ym:Int, a:Int, b:Int, color:Color):Void
 	{
 	   var x:Int = -a, y:Int = 0;           /* II. quadrant from bottom left to top right */
-	   var e2:Int = (Int)b*b, err:Int = (Int)x*(2*e2+x)+e2;         /* error of 1.step */
+	   var e2:Int = b*b, err:Int = x*(2*e2+x)+e2;         /* error of 1.step */
 															  
 	   do {                                                   
-		   g1.setPixel(xm-x, ym+y,color);                                 /*   I. Quadrant */
-		   g1.setPixel(xm+x, ym+y,color);                                 /*  II. Quadrant */
-		   g1.setPixel(xm+x, ym-y,color);                                 /* III. Quadrant */
-		   g1.setPixel(xm-x, ym-y,color);                                 /*  IV. Quadrant */
+		   g1.setPixel(xm-x, ym+y, color);                                 /*   I. Quadrant */
+		   g1.setPixel(xm+x, ym+y, color);                                 /*  II. Quadrant */
+		   g1.setPixel(xm+x, ym-y, color);                                 /* III. Quadrant */
+		   g1.setPixel(xm-x, ym-y, color);                                 /*  IV. Quadrant */
 		   e2 = 2*err;                                        
-		   if (e2 >= (x*2+1)*(Int)b*b)                           /* e_xy+e_x > 0 */
-			  err += (++x*2+1)*(Int)b*b;                     
-		   if (e2 <= (y*2+1)*(Int)a*a)                           /* e_xy+e_y < 0 */
-			  err += (++y*2+1)*(Int)a*a;
+		   if (e2 >= (x*2+1)*b*b)                           /* e_xy+e_x > 0 */
+			  err += (++x*2+1)*b*b;                     
+		   if (e2 <= (y*2+1)*a*a)                           /* e_xy+e_y < 0 */
+			  err += (++y*2+1)*a*a;
 	   } while (x <= 0);
 
 	   while (y++ < b) {                  /* too early stop of flat ellipses a=1, */
-		   g1.setPixel(xm, ym+y,color);                        /* -> finish tip of ellipse */
-		   g1.setPixel(xm, ym-y,color);
+		   g1.setPixel(xm, ym+y, color);                        /* -> finish tip of ellipse */
+		   g1.setPixel(xm, ym-y, color);
 	   }
 	}
 
@@ -63,18 +63,18 @@ class Gfx
 	   var dy:Int = x*x, err:Int = dx+dy;                             /* error of 1.step */
 														 
 	   do {                                              
-		   g1.setPixel(xm-x, ym+y,color);                                 /*   I. Quadrant */
-		   g1.setPixel(xm+x, ym+y,color);                                 /*  II. Quadrant */
-		   g1.setPixel(xm+x, ym-y,color);                                 /* III. Quadrant */
-		   g1.setPixel(xm-x, ym-y,color);                                 /*  IV. Quadrant */
+		   g1.setPixel(xm-x, ym+y, color);                                 /*   I. Quadrant */
+		   g1.setPixel(xm+x, ym+y, color);                                 /*  II. Quadrant */
+		   g1.setPixel(xm+x, ym-y, color);                                 /* III. Quadrant */
+		   g1.setPixel(xm-x, ym-y, color);                                 /*  IV. Quadrant */
 		   e2 = 2*err;
-		   if (e2 >= dx) { x++; err += dx += 2*(Int)b*b; }             /* x step */
-		   if (e2 <= dy) { y++; err += dy += 2*(Int)a*a; }             /* y step */
+		   if (e2 >= dx) { x++; err += dx += 2*b*b; }             /* x step */
+		   if (e2 <= dy) { y++; err += dy += 2*a*a; }             /* y step */
 	   } while (x <= 0);
 
 	   while (y++ < b) {            /* too early stop for flat ellipses with a=1, */
-		   g1.setPixel(xm, ym+y,color);                        /* -> finish tip of ellipse */
-		   g1.setPixel(xm, ym-y,color);
+		   g1.setPixel(xm, ym+y, color);                        /* -> finish tip of ellipse */
+		   g1.setPixel(xm, ym-y, color);
 	   }
 	}
 
@@ -82,10 +82,10 @@ class Gfx
 	{
 	   var x:Int = -r, y:Int = 0, err:Int = 2-2*r;                /* bottom left to top right */
 	   do {                                          
-		  g1.setPixel(xm-x, ym+y,color);                            /*   I. Quadrant +x +y */
-		  g1.setPixel(xm-y, ym-x,color);                            /*  II. Quadrant -x +y */
-		  g1.setPixel(xm+x, ym-y,color);                            /* III. Quadrant -x -y */
-		  g1.setPixel(xm+y, ym+x,color);                            /*  IV. Quadrant +x -y */
+		  g1.setPixel(xm-x, ym+y, color);                            /*   I. Quadrant +x +y */
+		  g1.setPixel(xm-y, ym-x, color);                            /*  II. Quadrant -x +y */
+		  g1.setPixel(xm+x, ym-y, color);                            /* III. Quadrant -x -y */
+		  g1.setPixel(xm+y, ym+x, color);                            /*  IV. Quadrant +x -y */
 		  r = err;                                   
 		  if (r <= y) err += ++y*2+1;                             /* e_xy+e_y < 0 */
 		  if (r > x || err > y)                  /* e_xy+e_x > 0 or no 2nd y-step */
@@ -132,7 +132,7 @@ class Gfx
 
 	  //assert(xx*sx <= 0 && yy*sy <= 0);       /* sign of gradient must not change */
 
-	  if (sx*(Int)sx+sy*(Int)sy > xx*xx+yy*yy) {      /* begin with longer part */
+	  if (sx*sx+sy*sy > xx*xx+yy*yy) {      /* begin with longer part */
 		x2 = x0; x0 = sx+x1; y2 = y0; y0 = sy+y1; cur = -cur;       /* swap P0 P2 */
 	  }
 	  if (cur != 0) {                                         /* no straight line */
@@ -249,7 +249,7 @@ class Gfx
 			 if (Math.abs(xx*y) > Math.abs(yy*x)) {                       /* which first? */
 				x0 = x2; x2 = xx+x1; y0 = y2; y2 = yy+y1;          /* swap points */
 			 }                            /* now horizontal cut at P4 comes first */
-		  if (x0 == x2 || w == 1.0) t = (x0-x1)/(Float)x;
+		  if (x0 == x2 || w == 1.0) t = (x0-x1)/x;
 		  else {                                 /* non-rational or rational case */
 			 q = Math.sqrt(4.0*w*w*(x0-x1)*(x2-x1)+(x2-x0)*(Int)(x2-x0));
 			 if (x1 < x0) q = -q;
@@ -721,7 +721,7 @@ class Gfx
 	   var dx:Int = iabs(x1-x0), sx:Int = x0 < x1 ? 1 : -1; 
 	   var dy:Int = iabs(y1-y0), sy:Int = y0 < y1 ? 1 : -1; 
 	   var err:Int = dx-dy, e2, x2:Int, y2:Int;                           /* error value e_xy */
-	   var ed:Float = dx+dy == 0 ? 1 : Math.sqrt((Float)dx*dx+(Float)dy*dy);
+	   var ed:Float = dx+dy == 0 ? 1 : Math.sqrt(dx*dx+dy*dy);
 														   
 	   for (wd = (wd+1)/2; ; ) {                                    /* pixel loop */
 		  setPixelColor(g1, x0, y0, color,max(0,255*(abs(err-dx+dy)/ed-wd+1)));
