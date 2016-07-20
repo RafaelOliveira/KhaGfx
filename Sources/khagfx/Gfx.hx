@@ -13,17 +13,15 @@ import kha.Color;
 
 class Gfx {
 
-    public inline static function setPixelAA(g1:Graphics, 
-											 x:Int,   y:Int,
-											 i:Float, col:Color) {                
+	public inline static function setPixelAA(g1:Graphics, x:Int, y:Int, i:Float, col:Color) 
+	{
 		col.A = i;
-        g1.setPixel( x, y, col ); 
-    }
+		g1.setPixel(x, y, col); 
+	}
 
-    // Fully ported, untested
-    public static function drawLine(g1:Graphics, 
-									x0:Int, y0:Int,
-									x1:Int, y1:Int, col: Color) {
+	// Fully ported, untested
+	public static function drawLine(g1:Graphics, x0:Int, y0:Int, x1:Int, y1:Int, col: Color) 
+	{
         var dx: Int =  Std.int( Math.abs( x1 - x0 ) );
         var sx: Int = ( x0 < x1 )? 1 : -1;
         var dy: Int = Std.int( - Math.abs( y1 - y0 ) );
@@ -50,10 +48,8 @@ class Gfx {
     }
 
     // Fully ported, untested
-    public static function drawEllipse(g1:Graphics,
-									   xm:Int, ym:Int,
-									   a:Int,  b:Int, 
-									   col:Color) {
+    public static function drawEllipse(g1:Graphics, xm:Int, ym:Int, a:Int, b:Int, col:Color) 
+	{
         var x: Int = -a;
         var y: Int = 0;                         // II. quadrant from bottom left to top right
         var e2 = b*b;
@@ -78,10 +74,8 @@ class Gfx {
     }
 
     // Fully ported, untested
-    public static function drawOptimizedEllipse(g1:Graphics,
-												xm:Int, ym:Int,
-												a:Int,  b:Int, 
-												col:Color) {
+    public static function drawOptimizedEllipse(g1:Graphics, xm:Int, ym:Int, a:Int, b:Int, col:Color) 
+	{
         var x: Float = -a;
         var y: Float = 0;                      // II. quadrant from bottom left to top right
         var e2: Float = b;
@@ -112,26 +106,31 @@ class Gfx {
     }
 
     // Fully ported, untested
-    public static function drawCircle(g1:Graphics, 
-									  xm:Int,  ym:Int, 
-									  r:Float, col:Color) {
-        var x: Float = -r;
-        var y: Float = 0;
-        var err: Float = 2 - 2*r;                // bottom left to top right
+    public static function drawCircle(g1:Graphics, xm:Int, ym:Int, r:Float, col:Color) 
+	{
+        var x:Float = -r;
+        var y:Float = 0;
+        var err:Float = 2 - 2 * r;										// bottom left to top right
 
-        do {
-            g1.setPixel( Std.int( xm - x ), Std.int( ym + y ), col );  //   I. Quadrant +x +y
-            g1.setPixel( Std.int( xm - y ), Std.int( ym - x ), col );  //  II. Quadrant -x +y
-            g1.setPixel( Std.int( xm + x ), Std.int( ym - y ), col );  // III. Quadrant -x -y
-            g1.setPixel( Std.int( xm + y ), Std.int( ym + x ), col );  //  IV. Quadrant +x -y
+        do
+		{
+            g1.setPixel(Std.int(xm - x), Std.int(ym + y), col);			//   I. Quadrant +x +y
+            g1.setPixel(Std.int(xm - y), Std.int(ym - x), col);			//  II. Quadrant -x +y
+            g1.setPixel(Std.int(xm + x), Std.int(ym - y), col);			// III. Quadrant -x -y
+            g1.setPixel(Std.int(xm + y), Std.int(ym + x), col);			//  IV. Quadrant +x -y
+			
             r = err;
-            if( r <= y ){
-                err += ++y*2 + 1;               // e_xy + e_y < 0
+			
+            if(r <= y)
+			{
+                err += ++y * 2 + 1;				// e_xy + e_y < 0
             }
-            if( r > x || err > y ){             // e_xy + e_x > 0 or no 2nd y-step
-                err += ++x*2 + 1;               // -> x-step now
+            if(r > x || err > y)				// e_xy + e_x > 0 or no 2nd y-step
+			{
+                err += ++x * 2 + 1;				// -> x-step now
             }
-        } while( x < 0 );
+        } 
+		while(x < 0);
     }
 
     // rectangular parameter enclosing the ellipse
