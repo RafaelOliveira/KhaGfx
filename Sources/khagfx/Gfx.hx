@@ -182,39 +182,38 @@ class Gfx {
         }
     }
 
-    // Fully ported, untested
-    // draw a limited quadratic Bezier segment
-    public static function drawQuadBezierSeg(g1:Graphics,
-											 x0:Int, y0:Int,
-											 x1:Int, y1:Int,
-											 x2:Int, y2:Int, 
-											 col:Color) {
-        var sx: Int = x2 - x1;
-        var sy: Int = y2 - y1;
-        var xx: Float = x0 - x1;
-        var yy: Float = y0  -y1;
-        var xy: Float;                      // relative values for checks
-        var dx: Float;
-        var dy: Float;
-        var err: Float;
-        var cur: Float = xx*sy - yy*sx;     // curvature
+	// Fully ported, untested
+	// draw a limited quadratic Bezier segment
+	public static function drawQuadBezierSeg(g1:Graphics, x0:Int, y0:Int, x1:Int, y1:Int, x2:Int, y2:Int,  col:Color) 
+	{
+		var sx:Int = x2 - x1;
+		var sy:Int = y2 - y1;
+		var xx:Float = x0 - x1;
+		var yy:Float = y0  -y1;
+		var xy:Float;                      					// relative values for checks
+		var dx:Float;
+		var dy:Float;
+		var err:Float;
+		var cur:Float = xx * sy - yy * sx;     				// curvature
 
         // sign of gradient must not change
-        if( xx*sx <= 0 && yy*sy <= 0 ) {} else { trace('failed to drawQuadBezierSeg' ); return; }
+        if (xx * sx <= 0 && yy * sy <= 0) {} else { trace('failed to drawQuadBezierSeg' ); return; }
 
-        if( sx*sx + sy*sy > xx*xx + yy*yy ) {      // begin with longer part
+        if (sx * sx + sy * sy > xx * xx + yy * yy)			// begin with longer part
+		{      
             x2 = x0;
             x0 = sx + x1;
             y2 = y0;
             y0 = sy + y1;
             cur = -cur;       // swap P0 P2
         }
-        if( cur != 0 ) {                                    // no straight line
+        if (cur != 0)										// no straight line
+		{                                    
             xx += sx;
-            xx *= sx = ( x0 < x2 )? 1 : -1;                 // x step direction
+            xx *= sx = (x0 < x2) ? 1 : -1;                 	// x step direction
             yy += sy;
-            yy *= sy = ( y0 < y2 )? 1 : -1;                 // y step direction
-            xy = 2*xx*yy;
+            yy *= sy = (y0 < y2) ? 1 : -1;                 	// y step direction
+            xy = 2 * xx * yy;
             xx *= xx;
             yy *= yy;                                       // differences 2nd degree
             if( cur*sx*sy < 0 ) {                           // negated curvature?
@@ -230,8 +229,8 @@ class Gfx {
             err = dx + dy + xy;                             // error 1st step
             do {
                 g1.setPixel( x0, y0, col ); // draw curve
-                if( x0 == x2 && y0 == y2 ) return;                  // last pixel -> curve finished
-                //y1 = 2*err < dx;                                    // save value for test of y step
+                if( x0 == x2 && y0 == y2 ) return;                  	// last pixel -> curve finished
+                //y1 = 2*err < dx;                                    	// save value for test of y step
                 if( 2*err > dy ) {
                     x0 += sx;
                     dx -= xy;
@@ -249,11 +248,8 @@ class Gfx {
 
     // Fully ported, untested
     // draw any quadratic Bezier curve
-    public static function drawQuadBezier(g1:Graphics,
-                                          x0:Int, y0: Int,
-                                          x1:Int, y1: Int,
-                                          x2:Int, y2: Int,
-                                          col:Color) {
+    public static function drawQuadBezier(g1:Graphics, x0:Int, y0:Int, x1:Int, y1: Int, x2:Int, y2:Int, col:Color) 
+	{
         var x: Int = x0 - x1;
         var y: Int = y0 - y1;
         var t: Float = x0 - 2*x1 + x2;
