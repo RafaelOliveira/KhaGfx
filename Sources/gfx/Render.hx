@@ -14,7 +14,7 @@ class Render
 		var px:Float, py:Float;
 		
 		var angle:Float = 0.0;
-		var angle_stepsize:Float = 0.1;
+		//var angle_stepsize:Float = 0.1;
 
 		// go through all angles from 0 to 2 * PI radians
 		while (angle < (2 * Math.PI))
@@ -42,7 +42,7 @@ class Render
 		var px:Float, py:Float;
 		
 		var angle:Float = 0.0;
-		var angle_stepsize:Float = 0.1;
+		//var angle_stepsize:Float = 0.1;
 
 		// go through all angles from 0 to 2 * PI radians
 		while (angle < (2 * Math.PI))

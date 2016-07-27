@@ -2,6 +2,7 @@ package gfx;
 
 import kha.math.Vector2;
 
+@:allow(gfx.RenderEx)
 class Geom
 {
     public static function getLine(x0:Float, y0:Float, x1:Float, y1:Float, segments:Int = 0):Array<Vector2> 
@@ -51,5 +52,80 @@ class Geom
 		points.push(new Vector2(rx + cx, cy));
 
         return points;
+	}
+
+    public static function getCubicBezier(x:Array<Float>, y:Array<Float>, segments:Int = 20):Array<Vector2> 
+    {
+        var points = new Array<Vector2>();
+
+		var t:Float;
+		
+		var p = calculateCubicBezierPoint(0, x, y);
+        points.push(new Vector2(p[0], p[1]));		
+		
+		for (i in 1...(segments + 1)) 
+        {
+			t = i / segments;
+			p = calculateCubicBezierPoint(t, x, y);
+            points.push(new Vector2(p[0], p[1]));						
+		}
+
+        return points;
+	}
+
+    public static function getCubicBezierPath(x:Array<Float>, y:Array<Float>, segments:Int = 20):Array<Vector2>
+    {
+        var points = new Array<Vector2>();
+
+		var i = 0;
+		var t:Float;
+		var p:Array<Float> = null;		
+
+		while (i < x.length - 3) 
+        {
+			if (i == 0)
+            {
+                p = calculateCubicBezierPoint(0, [x[i], x[i + 1], x[i + 2], x[i + 3]], [y[i], y[i + 1], y[i + 2], y[i + 3]]);
+                points.push(new Vector2(p[0], p[1]));
+            }
+				
+
+			for (j in 1...(segments + 1)) 
+            {
+				t = j / segments;
+				p = calculateCubicBezierPoint(t, [x[i], x[i + 1], x[i + 2], x[i + 3]], [y[i], y[i + 1], y[i + 2], y[i + 3]]);
+                points.push(new Vector2(p[0], p[1]));								
+			}
+			
+			i += 3;
+		}
+
+        return points;
+	}
+
+    static function calculateCubicBezierPoint(t:Float, x:Array<Float>, y:Array<Float>):Array<Float> 
+    {
+		var u:Float = 1 - t;
+		var tt:Float = t * t;
+		var uu:Float = u * u;
+		var uuu:Float = uu * u;
+		var ttt:Float = tt * t;
+	 		
+		// first term
+		var p:Array<Float> = [uuu * x[0], uuu * y[0]];
+			
+		// second term				
+		p[0] += 3 * uu * t * x[1];
+		p[1] += 3 * uu * t * y[1];
+			
+		// third term				
+		p[0] += 3 * u * tt * x[2];
+		p[1] += 3 * u * tt * y[2];		
+			
+		// fourth term				
+		p[0] += ttt * x[3];
+		p[1] += ttt * y[3];
+
+		return p;
 	}
 }

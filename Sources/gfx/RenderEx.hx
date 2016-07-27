@@ -85,4 +85,44 @@ class RenderEx
 		}		
         drawLineEx(g2, renderFunc, v1.x + x, v1.y + y, v0.x + x, v0.y + y);
 	}
+
+	public static function drawCubicBezierEx(g2:Graphics, renderFunc:Graphics->Float->Float->Void, x:Array<Float>, y:Array<Float>, segments:Int = 20):Void 
+    {
+		var t:Float;
+		
+		var p = Geom.calculateCubicBezierPoint(0, x, y);
+        renderFunc(g2, p[0], p[1]);		
+		
+		for (i in 1...(segments + 1)) 
+        {
+			t = i / segments;
+			p = Geom.calculateCubicBezierPoint(t, x, y);
+            renderFunc(g2, p[0], p[1]);			
+		}        
+	}
+
+	public static function drawCubicBezierPathEx(g2:Graphics, renderFunc:Graphics->Float->Float->Void, x:Array<Float>, y:Array<Float>, segments:Int = 20):Void
+    {
+		var i = 0;
+		var t:Float;
+		var p:Array<Float> = null;		
+
+		while (i < x.length - 3) 
+        {
+			if (i == 0)
+            {
+                p = Geom.calculateCubicBezierPoint(0, [x[i], x[i + 1], x[i + 2], x[i + 3]], [y[i], y[i + 1], y[i + 2], y[i + 3]]);
+                renderFunc(g2, p[0], p[1]);
+            }				
+
+			for (j in 1...(segments + 1)) 
+            {
+				t = j / segments;
+				p = Geom.calculateCubicBezierPoint(t, [x[i], x[i + 1], x[i + 2], x[i + 3]], [y[i], y[i + 1], y[i + 2], y[i + 3]]);
+                renderFunc(g2, p[0], p[1]);								
+			}
+			
+			i += 3;
+		}        
+	}
 }
